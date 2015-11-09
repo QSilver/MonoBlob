@@ -16,6 +16,7 @@ namespace MonoBlob
         float x;
         float y;
         float delay = BlobManager.delay;
+        int moveStep = BlobManager.moveStep;
         float timeStep = 0f;
 
         public Blob(float x, float y, ContentManager content)
@@ -31,10 +32,10 @@ namespace MonoBlob
             int dir = Game1.rnd.Next(0, 4);
             switch (dir)
             {
-                case 0: x += 10; break;
-                case 1: x -= 10; break;
-                case 2: y += 10; break;
-                case 3: y -= 10; break;
+                case 0: x += moveStep; break;
+                case 1: x -= moveStep; break;
+                case 2: y += moveStep; break;
+                case 3: y -= moveStep; break;
             }
         }
 
@@ -57,6 +58,7 @@ namespace MonoBlob
             timeStep += (float)gameTime.ElapsedGameTime.Milliseconds;
             if (timeStep > delay)
             {
+                // fancy logic here
                 this.move();
                 timeStep = 0f;
             }
@@ -64,7 +66,9 @@ namespace MonoBlob
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.DrawRectangle(new Vector2(this.x - 5, this.y - 5), new Vector2(10, 10), Color.Red);
+            // fancy drawing here
+            // spriteBatch.DrawRectangle(new Vector2(this.x - 5, this.y - 5), new Vector2(10, 10), Color.Red);
+            spriteBatch.DrawCircle(this.x, this.y, 2f, 20, Color.Red, 5f);
         }
     }
 }

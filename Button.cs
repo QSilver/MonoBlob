@@ -14,16 +14,31 @@ namespace MonoBlob
         float x;
         float y;
         float size = 30;
+        String name;
+        Color color;
 
-        public Button(float x, float y)
+        public Button(float x, float y, String s, Color c)
         {
             this.x = x;
             this.y = y;
+            this.name = s;
+            this.color = c;
+        }
+
+        public void setColor(Color c)
+        {
+            this.color = c;
+        }
+
+        public Rectangle getRect()
+        {
+            return new Rectangle((int)x, (int)y, (int)size * 2, (int)size);
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.FillRectangle(new Vector2(this.x, this.y), new Vector2(size*2, size), Color.Red);
+            spriteBatch.FillRectangle(new Vector2(this.x, this.y), new Vector2(this.size*2, this.size), this.color);
+            //spriteBatch.DrawString();
         }
     }
 }

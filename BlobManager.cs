@@ -7,6 +7,7 @@ namespace MonoBlob
 {
     class BlobManager
     {
-        public static float delay = 50f;
+        public static float delay = 10f;
+        public static int moveStep = 1;
     }
 }

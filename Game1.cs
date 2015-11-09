@@ -21,6 +21,8 @@ namespace MonoBlob
         int ScreenHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
         int wWidth = 0;
         int wHeight = 0;
+        int started = 0;
+        const int buttonPad = 5;
         const float windowScale = 0.8f;
         const float planeScaleW = 0.75f;
         const float planeScaleH = 0.66f;
@@ -29,7 +31,8 @@ namespace MonoBlob
         Color backColor = Color.CornflowerBlue;
         Color lineColor = Color.Blue;
         public static Random rnd = new Random();
-        KeyboardState oldState;
+        KeyboardState oldKeyState;
+        MouseState oldMouseState;
      
         List<Blob> blobs = new List<Blob>();
         List<Button> buttons = new List<Button>();
@@ -39,6 +42,25 @@ namespace MonoBlob
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+        }
+
+        public void Reset()
+        {
+            started = 0;
+            blobs.Clear();
+        }
+
+        public void StartSimulation()
+        {
+            if (started == 0)
+            {
+                for (int i = 0; i < 10; i++)
+                {
+                    Blob b = new Blob(50 * (i+5), 250, this.Content);
+                    blobs.Add(b);
+                }
+            }
+            started = 1;
         }
 
         /// <summary>
@@ -58,19 +80,13 @@ namespace MonoBlob
             this.Window.Position = new Point((int)(ScreenWidth * (1 - windowScale) / 2), (int)(ScreenHeight * (1 - windowScale)/4));
             graphics.ApplyChanges();
 
-            #region Debug
-            for (int i = 0; i < 10; i++)
-            {
-                Blob b = new Blob(50 * (i+5), 250, this.Content);
-                blobs.Add(b);
-            }
-
-            Button speedMinus = new Button(wWidth * planeScaleW, 0);
-            buttons.Add(speedMinus);
-            #endregion
+            Button start = new Button(wWidth * planeScaleW + buttonPad, 0 + buttonPad, "Start", Color.Green);
+            buttons.Add(start);
+            Button reset = new Button(wWidth * planeScaleW + buttonPad + (60 + buttonPad), 0 + buttonPad, "Reset", Color.Black);
+            buttons.Add(reset);
         }
 
-        #region
+        #region Stuff
         /// <summary>
         /// LoadContent will be called once per game and is the place to load
         /// all of your content.
@@ -101,22 +117,44 @@ namespace MonoBlob
 
         protected override void Update(GameTime gameTime)
         {
-            KeyboardState newState = Keyboard.GetState();
+            KeyboardState newKeyState = Keyboard.GetState();
+            MouseState newMouseState = Mouse.GetState();
+            Rectangle mousePos = new Rectangle(Mouse.GetState().Position, new Point(1, 1));
 
-            if (newState.IsKeyDown(Keys.Escape))
+            if (newKeyState.IsKeyDown(Keys.Escape))
             {
                 gameState = 0;
                 Exit();
             }
 
-            if (newState.IsKeyUp(Keys.Space) && oldState.IsKeyDown(Keys.Space))
+            if (newKeyState.IsKeyUp(Keys.Space) && oldKeyState.IsKeyDown(Keys.Space))
             {
                 if (gameState == 0) gameState = 1;
                 else gameState = 0;
             }
 
+            if (mousePos.Intersects(buttons[0].getRect()))
+            {
+                if (newMouseState.LeftButton == ButtonState.Released && oldMouseState.LeftButton == ButtonState.Pressed)
+                {
+                    if (gameState == 0) {gameState = 1; buttons[0].setColor(Color.Red);}
+                    else { gameState = 0; buttons[0].setColor(Color.Green); }
+                }
+            }
+
+            if (mousePos.Intersects(buttons[1].getRect()))
+            {
+                if (newMouseState.LeftButton == ButtonState.Released && oldMouseState.LeftButton == ButtonState.Pressed)
+                {
+                    gameState = 0;
+                    buttons[0].setColor(Color.Green);
+                    Reset();
+                }
+            }
+
             if (gameState == 1)
             {
+                if (started == 0) StartSimulation();
                 foreach (Blob b in blobs)
                 {
                     b.Update(gameTime);
@@ -125,7 +163,8 @@ namespace MonoBlob
                 base.Update(gameTime);
             }
 
-            oldState = newState;
+            oldKeyState = newKeyState;
+            oldMouseState = newMouseState;
         }
 
         /// <summary>
