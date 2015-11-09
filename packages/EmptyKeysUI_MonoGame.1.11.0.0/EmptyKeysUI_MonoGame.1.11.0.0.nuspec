@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>EmptyKeysUI_MonoGame</id>
+    <version>1.11.0.0</version>
+    <title>Empty Keys UI MonoGame</title>
+    <authors>Empty Keys - Filip Dušek</authors>
+    <owners>Empty Keys - Filip Dušek</owners>
+    <licenseUrl>http://emptykeys.com/license</licenseUrl>
+    <projectUrl>http://emptykeys.com/ui_library</projectUrl>
+    <iconUrl>http://emptykeys.com/Portals/0/Images/EmptyKeysLogoNoText96px.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Empty Keys UI is XAML based UI for .NET or Mono. It's Portable Class Library. This package supports only MonoGame engine.</description>
+    <releaseNotes>http://emptykeys.com/Community/aft/11/afpgj/2#1649</releaseNotes>
+    <copyright>(c) 2015 Empty Keys, Filip Dušek</copyright>
+    <tags>monogame ui gui xaml game</tags>
+  </metadata>
+</package>
