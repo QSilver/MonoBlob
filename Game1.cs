@@ -84,6 +84,10 @@ namespace MonoBlob
             buttons.Add(start);
             Button reset = new Button(wWidth * planeScaleW + buttonPad + (60 + buttonPad), 0 + buttonPad, "Reset", Color.Black);
             buttons.Add(reset);
+            Button simSpeedMinus = new Button(wWidth * planeScaleW + buttonPad, 30 + buttonPad * 2, "Speed Minus", Color.Blue);
+            buttons.Add(simSpeedMinus);
+            Button simSpeedPlus = new Button(wWidth - buttonPad - 60, 30 + buttonPad * 2, "Speed Plus", Color.Blue);
+            buttons.Add(simSpeedPlus);
         }
 
         #region Stuff
@@ -152,6 +156,22 @@ namespace MonoBlob
                 }
             }
 
+            if (mousePos.Intersects(buttons[2].getRect()))
+            {
+                if (newMouseState.LeftButton == ButtonState.Pressed)// && oldMouseState.LeftButton == ButtonState.Pressed)
+                {
+                    if (BlobManager.delay < 990) BlobManager.delay += 10f;
+                }
+            }
+
+            if (mousePos.Intersects(buttons[3].getRect()))
+            {
+                if (newMouseState.LeftButton == ButtonState.Pressed)// && oldMouseState.LeftButton == ButtonState.Pressed)
+                {
+                    if (BlobManager.delay > 0) BlobManager.delay -= 10f;
+                }
+            }
+
             if (gameState == 1)
             {
                 if (started == 0) StartSimulation();
@@ -185,6 +205,8 @@ namespace MonoBlob
             }
             spriteBatch.FillRectangle(wWidth * planeScaleW, 0, wWidth * planeScaleW, wHeight, backColor);
             spriteBatch.FillRectangle(0, wHeight * planeScaleH, wWidth, wHeight * planeScaleH, backColor);
+
+            spriteBatch.FillRectangle(wWidth * planeScaleW + buttonPad * 2 + 60, 30 + buttonPad * 2, ((wWidth - buttonPad * 2 - 60) - (wWidth * planeScaleW + buttonPad * 2 + 60)) * (1000f-BlobManager.delay)/1000f, 30, Color.Green);
 
             foreach (Button b in buttons)
             {
